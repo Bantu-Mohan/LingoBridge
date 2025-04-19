@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingoBridge - Language Detector & Translator</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        /* Background with animated gradient */
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb);
+            background-size: 400% 400%;
+            animation: gradientBG 8s ease infinite;
+        }
+
+        /* Gradient animation */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Container styling */
+        .container {
+            max-width: 500px;
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Title & subtitle */
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Input styling */
+        .input-group {
+            display: flex;
+        }
+
+        .form-control {
+            height: 45px;
+            font-size: 16px;
+        }
+
+        .btn {
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Results box */
+        .result-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1.1rem;
+        }
+
+        /* Smooth text fade */
+        .result-box p {
+            margin: 10px 0;
+            transition: all 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🌍 LingoBridge</h1>
+        <p class="subtitle">Detect language & translate instantly</p>
+
+        <div class="input-group mt-3">
+            <input type="text" id="text-input" class="form-control" placeholder="Enter text to detect language...">
+            <button class="btn btn-success" onclick="translateText()">Detect & Translate</button>
+        </div>
+
+        <div id="results" class="mt-4">
+            <div class="result-box">
+                <p id="original-text"></p>
+                <p id="detected-language"></p>
+                <p id="translated-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function translateText() {
+            var text = $('#text-input').val();
+            if (!text) {
+                alert("Please enter some text!");
+                return;
+            }
+
+            $.ajax({
+                url: '/translate',
+                method: 'POST',
+                data: { text: text },
+                success: function(response) {
+                    $('#original-text').html(`<strong>Original Text:</strong> ${response.original_text}`);
+                    $('#detected-language').html(`<strong>Detected Language:</strong> ${response.detected_language_name} (${response.detected_language_code})`);
+                    $('#translated-text').html(`<strong>Translated Text:</strong> ${response.translated_text}`);
+
+                    $('.result-box').fadeIn(); // Smooth fade-in effect
+                },
+                error: function() {
+                    alert('Translation failed. Please try again.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

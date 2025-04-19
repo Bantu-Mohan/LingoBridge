@@ -1,0 +1,5 @@
+Flask==2.2.5
+langdetect==1.0.9
+googletrans==4.0.0-rc1
+Werkzeug==2.2.3
+bootstrap-flask==2.2.0
